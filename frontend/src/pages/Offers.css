@@ -1,0 +1,132 @@
+.offers-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 20px;
+}
+
+.offers-page h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.offer-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+}
+
+.offer-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.offer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e74c3c;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.offer-content {
+  padding: 1.5rem;
+}
+
+.offer-content h3 {
+  margin: 0 0 0.5rem;
+  color: #2c3e50;
+}
+
+.offer-location {
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.offer-description {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.offer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.offer-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.new-price {
+  color: #27ae60;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.offer-slots {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.low-stock {
+  color: #e74c3c;
+}
+
+.offer-button {
+  display: block;
+  text-align: center;
+  background: #3498db;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.offer-button:hover {
+  background: #2980b9;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}

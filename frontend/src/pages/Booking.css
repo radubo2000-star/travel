@@ -1,0 +1,133 @@
+.booking-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 20px;
+}
+
+.booking-page h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.booking-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .booking-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booking-summary {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+.booking-summary h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.summary-offer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.summary-offer img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.summary-offer h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.summary-offer p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.summary-pricing p {
+  margin: 0.5rem 0;
+}
+
+.summary-pricing .total {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #27ae60;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.booking-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.booking-form h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #219a52;
+}
+
+.submit-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
