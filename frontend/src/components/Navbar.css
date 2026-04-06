@@ -40,3 +40,23 @@
 .navbar-menu li a:hover {
   color: #3498db;
 }
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.logout-btn:hover {
+  color: #e74c3c;
+}
+
+.register-link {
+  background: #3498db;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = 12001;
@@ -8,7 +9,22 @@ const PORT = 12001;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Mock data
+// Simple token generation
+const generateToken = () => crypto.randomBytes(32).toString('hex');
+
+// Mock data - Users
+let users = [
+  {
+    id: 1,
+    name: 'Admin User',
+    email: 'admin@travel.ro',
+    password: 'admin123',
+    role: 'admin',
+    phone: '+40 700 000 000'
+  }
+];
+
+// Mock data - Offers
 let offers = [
   {
     id: 1,
@@ -127,7 +143,7 @@ app.get('/api/offers/:id', (req, res) => {
 });
 
 app.post('/api/bookings', (req, res) => {
-  const { offerId, name, email, phone, guests, paymentMethod, totalPrice } = req.body;
+  const { offerId, name, email, phone, guests, paymentMethod, totalPrice, userId } = req.body;
   
   const offer = offers.find(o => o.id === offerId);
   if (!offer) {
@@ -140,17 +156,30 @@ app.post('/api/bookings', (req, res) => {
   
   const newBooking = {
     id: bookings.length + 1,
+    userId: userId || null,
     offerId,
     offerTitle: offer.title,
-    name,
-    email,
-    phone,
+    offerImage: offer.image,
+    name: userId ? undefined : name, // Use user data if logged in
+    email: userId ? undefined : email,
+    phone: userId ? undefined : phone,
     guests,
     totalPrice,
     paymentMethod,
     status: 'pending',
+    paymentStatus: 'unpaid',
     date: new Date().toISOString().split('T')[0]
   };
+  
+  // If user is logged in, get their details
+  if (userId) {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      newBooking.name = user.name;
+      newBooking.email = user.email;
+      newBooking.phone = user.phone || '';
+    }
+  }
   
   bookings.push(newBooking);
   offer.availableSlots -= guests;
@@ -197,6 +226,90 @@ app.delete('/api/offers/:id', (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ============ USER AUTHENTICATION ROUTES ============
+
+// Register new user
+app.post('/api/auth/register', (req, res) => {
+  const { name, email, password, phone } = req.body;
+  
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email și parolă sunt obligatorii' });
+  }
+  
+  const existingUser = users.find(u => u.email === email);
+  if (existingUser) {
+    return res.status(400).json({ error: 'Email deja înregistrat' });
+  }
+  
+  const newUser = {
+    id: users.length + 1,
+    name,
+    email,
+    password, // In production, hash this!
+    role: 'client',
+    phone: phone || ''
+  };
+  
+  users.push(newUser);
+  
+  const token = generateToken();
+  res.status(201).json({
+    user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role },
+    token
+  });
+});
+
+// Login
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email și parolă sunt obligatorii' });
+  }
+  
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) {
+    return res.status(401).json({ error: 'Email sau parolă incorectă' });
+  }
+  
+  const token = generateToken();
+  res.json({
+    user: { id: user.id, name: user.name, email: user.email, role: user.role },
+    token
+  });
+});
+
+// Get current user profile
+app.get('/api/auth/me', (req, res) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ error: 'Nu ești autentificat' });
+  }
+  
+  // In production, validate token against stored tokens
+  // For mock, we'll use a simple user lookup
+  const userId = parseInt(req.headers['x-user-id']);
+  const user = users.find(u => u.id === userId);
+  
+  if (!user) {
+    return res.status(401).json({ error: 'Utilizator invalid' });
+  }
+  
+  res.json({ id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone });
+});
+
+// Get user's bookings
+app.get('/api/my-bookings', (req, res) => {
+  const userId = parseInt(req.headers['x-user-id']);
+  
+  if (!userId) {
+    return res.status(401).json({ error: 'Nu ești autentificat' });
+  }
+  
+  const userBookings = bookings.filter(b => b.userId === userId);
+  res.json(userBookings);
 });
 
 app.listen(PORT, '0.0.0.0', () => {
